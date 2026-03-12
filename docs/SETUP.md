@@ -157,15 +157,13 @@ ssh your-username@nas-ip
 sudo apt-get update && sudo apt-get install -y git
 
 # Create media and download directories
-sudo mkdir -p /volume1/data/media/{tv,movies}
-sudo mkdir -p /volume1/data/torrents/{tv,movies}
-sudo mkdir -p /volume1/data/usenet/{incomplete,complete/{tv,movies}}
+sudo mkdir -p /volume1/data/{torrents/{tv,movies,music},media/{tv,movies,music}}
 sudo chown -R 1000:1000 /volume1/data/media /volume1/data/torrents /volume1/data/usenet
 
 # Clone the repo
-cd /volume1/docker
-sudo git clone https://github.com/Pharkie/ultimate-arr-stack.git arr-stack  # or your fork
-sudo chown -R 1000:1000 /volume1/docker/arr-stack
+cd /volume2/docker
+sudo git clone https://github.com/soloric/ultimate-arr-stack.git arr-stack  # or your fork
+sudo chown -R 1000:1000 /volume2/docker/arr-stack
 ```
 
 **Note:** Use `sudo` for Docker commands on Ugreen NAS. Service configs are stored in Docker named volumes (auto-created on first run).
@@ -186,34 +184,6 @@ Scanning media files for viruses is unnecessary - video/audio files can't contai
 </details>
 
 <details>
-<summary><strong>Synology / QNAP</strong></summary>
-
-Use File Station to create:
-- **data** shared folder with subfolder: **media** (containing **tv** and **movies**)
-- **docker** shared folder
-
-Then via SSH:
-```bash
-ssh your-username@nas-ip
-
-# Install git if not present (Synology)
-sudo synopkg install Git
-
-# Create media and download directories
-sudo mkdir -p /volume1/data/media/{tv,movies}
-sudo mkdir -p /volume1/data/torrents/{tv,movies}
-sudo mkdir -p /volume1/data/usenet/{incomplete,complete/{tv,movies}}
-sudo chown -R 1000:1000 /volume1/data/media /volume1/data/torrents /volume1/data/usenet
-
-# Clone the repo
-cd /volume1/docker
-sudo git clone https://github.com/Pharkie/ultimate-arr-stack.git arr-stack  # or your fork
-sudo chown -R 1000:1000 /volume1/docker/arr-stack
-```
-
-</details>
-
-<details>
 <summary><strong>Linux Server / Generic</strong></summary>
 
 ```bash
@@ -221,14 +191,12 @@ sudo chown -R 1000:1000 /volume1/docker/arr-stack
 sudo apt-get update && sudo apt-get install -y git
 
 # Create media and download directories
-sudo mkdir -p /srv/data/media/{tv,movies}
-sudo mkdir -p /srv/data/torrents/{tv,movies}
-sudo mkdir -p /srv/data/usenet/{incomplete,complete/{tv,movies}}
+sudo mkdir -p /srv/data/{torrents/{tv,movies,music},media/{tv,movies,music}}
 sudo chown -R 1000:1000 /srv/data
 
 # Clone the repo
 cd /srv/docker
-sudo git clone https://github.com/Pharkie/ultimate-arr-stack.git arr-stack  # or your fork
+sudo git clone https://github.com/soloric/ultimate-arr-stack.git arr-stack  # or your fork
 sudo chown -R 1000:1000 /srv/docker/arr-stack
 ```
 
@@ -243,15 +211,12 @@ sudo chown -R 1000:1000 /srv/docker/arr-stack
 ├── data/
 │   ├── media/                # Library files (TRaSH recommended)
 │   │   ├── movies/           #   Movie library (Radarr → Jellyfin)
+│   │   ├── music/            #   Music library (Lidarr → Jellyfin)
 │   │   └── tv/               #   TV show library (Sonarr → Jellyfin)
 │   ├── torrents/             # qBittorrent downloads
-│   │   ├── tv/               #   Sonarr category
-│   │   └── movies/           #   Radarr category
-│   └── usenet/               # SABnzbd downloads
-│       ├── incomplete/       #   In-progress downloads
-│       └── complete/         #   Completed downloads
-│           ├── tv/           #   Sonarr category
-│           └── movies/       #   Radarr category
+│   │   ├── movies/           #   Radarr category
+│   │   ├── music/            #   Lidarr category
+│   │   └── tv/               #   Sonarr category
 └── docker/
     └── arr-stack/
         ├── traefik/              # + local DNS / + remote access only
