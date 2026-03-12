@@ -138,7 +138,16 @@ sudo apt-get update && sudo apt-get install -y git
 
 # Create media and download directories
 sudo mkdir -p /volume1/data/{torrents/{tv,movies,music},media/{tv,movies,music}}
-sudo chown -R 1000:1000 /volume1/data/media /volume1/data/torrents
+#sudo chown -R 1000:1000 /volume1/data/media /volume1/data/torrents
+sudo chown -R 1000:1000 /volume1/data
+sudo chmod -R a=,a+rX,u+w,g+w /volume1/data
+# Verify rigths
+ls -ln /volume1/data
+#it must be as
+# ls -ln /volume1/data/
+# total 0
+# drwxrwxr-x 1 1000 1000 26 Mar 12 22:58 media
+# drwxrwxr-x 1 1000 1000 24 Mar 12 22:58 torrents
 
 # Clone the repo
 cd /volume2/docker
@@ -251,7 +260,7 @@ If wrong, you'll see errors like "Folder '/tv/' is not writable by user 'abc'" i
 Set your timezone (used for scheduling, logs, and UI times):
 
 ```bash
-TZ=Europe/London              # Find yours: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+TZ=Europe/Moscow              # Find yours: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 ```
 
 ### 2.4 Configure VPN
