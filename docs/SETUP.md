@@ -54,10 +54,7 @@ Decide how you'll access your media stack:
   </details>
 - **SSH access** to your NAS (enable in NAS settings)
 - **VPN Subscription** - Any provider supported by [Gluetun](https://github.com/qdm12/gluetun-wiki/tree/main/setup/providers) (Surfshark, NordVPN, PIA, Mullvad, ProtonVPN, etc.)
-- **Usenet Provider** (optional, ~$4-6/month) - Frugal Usenet, Newshosting, Eweka, etc.
-- **Usenet Indexer** (optional) - NZBGeek (~$12/year) or DrunkenSlug (free tier)
 
-> **Why Usenet?** More reliable than public torrents (no fakes), faster downloads, SSL-encrypted (no VPN needed). See [SABnzbd setup](APP-CONFIG.md#43-sabnzbd-usenet-downloads).
 
 **For + remote access:**
 - **Domain name** (~$10/year) - [Cloudflare Registrar](https://www.cloudflare.com/products/registrar/) recommended
@@ -77,7 +74,6 @@ Decide how you'll access your media stack:
 | **Radarr** | Movie manager - searches for movies, sends to download client | Core |
 | **Prowlarr** | Indexer manager - finds download sources for Sonarr/Radarr | Core |
 | **qBittorrent** | Torrent client - downloads files (through VPN) | Core |
-| **SABnzbd** | Usenet client - downloads files via SSL (optional, for Usenet users) | Core |
 | **Bazarr** | Subtitle manager - finds and syncs subtitles for your library | Core |
 | **Gluetun** | VPN container - routes download traffic through VPN so your ISP can't see what you download | Core |
 | **Pi-hole** | DNS server - blocks ads, provides Docker DNS | Core |
@@ -113,22 +109,6 @@ Decide how you'll access your media stack:
 
 See [Quick Reference](REFERENCE.md) for full service lists, .lan URLs, and network details.
 
-<details>
-<summary><strong>Prefer Plex over Jellyfin?</strong></summary>
-
-This stack uses Jellyfin, but you can swap to Plex by modifying `docker-compose.arr-stack.yml`:
-
-1. **Replace the Jellyfin service** with Plex (`lscr.io/linuxserver/plex`), port `32400`, and add `PLEX_CLAIM` env var (get from https://plex.tv/claim)
-2. **Replace the Seerr service** with Overseerr if preferred (Seerr supports both Jellyfin and Plex)
-3. **Update volumes**: `jellyfin-config`/`jellyfin-cache` → `plex-config`
-4. **Update Traefik routes**: `jellyfin.lan`/`jellyfin.yourdomain.com` → `plex.lan`/`plex.yourdomain.com`, point to port `32400`
-5. **Update Pi-hole DNS**: add `plex.lan` entry
-6. **Remove hardware transcoding** lines (`devices`, `group_add`) unless you configure Plex hardware transcoding separately
-
-This is not tested or supported — you're on your own.
-
-</details>
-
 ---
 
 ## Step 1: Create Directories and Clone/Fork Repository
@@ -146,7 +126,7 @@ Docker comes preinstalled on UGOS - no installation needed! Folders created via 
 
 1. Open UGOS web interface → **Files** app
 2. Create shared folders: **data**, **docker**
-3. Inside **data**, create subfolder: **media**, then inside **media** create **tv** and **movies**
+3. Inside **data**, create subfolder: **media**, then inside **media** create **tv**, **music**, **movies** (maybe neet to include comics)
 4. Enable SSH: **Control Panel** → **Terminal** → toggle SSH on
 5. SSH into your NAS and create download directories + install git:
 
@@ -158,7 +138,7 @@ sudo apt-get update && sudo apt-get install -y git
 
 # Create media and download directories
 sudo mkdir -p /volume1/data/{torrents/{tv,movies,music},media/{tv,movies,music}}
-sudo chown -R 1000:1000 /volume1/data/media /volume1/data/torrents /volume1/data/usenet
+sudo chown -R 1000:1000 /volume1/data/media /volume1/data/torrents
 
 # Clone the repo
 cd /volume2/docker
